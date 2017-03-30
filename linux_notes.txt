@@ -222,6 +222,15 @@ Similarly for removing these pre-release tags from a local git repo:
 
 $ git tag -l | awk '/^(.*[a-z])$/ {print $1}'  | xargs git tag -d
 
+Forked branch upstream remote and no push
+
+git remote add upstream git@github.company.com:organization/code.git
+git fetch upstream
+git checkout --track origin/master
+git merge master upstream/master
+git remote set-url --push upstream no_push
+
+
 
 http://blog.siyelo.com/how-to-bulk-delete-remote-git-tags/
 
@@ -1009,7 +1018,7 @@ http://raspberrypi.stackexchange.com/questions/9217/resource-busy-error-when-usi
 
 mounting usb drives in ubuntu
 
-Step 1. Check the blockdevices and the file systems that are assigned to those block devices.
+Step 1. Check the blockobjects and the file systems that are assigned to those block objects.
 
 lsblk
 
@@ -1041,9 +1050,9 @@ lsblk
 
 Yes, we can see that the filesystem on the USB stick is mounted to /media/usbstick
 
-Addendum : if there are no logical names like /dev/sdb, you should first create them. See this information about setting up and controling loop devices with the losetup command
+Addendum : if there are no logical names like /dev/sdb, you should first create them. See this information about setting up and controling loop objects with the losetup command
 
-http://askubuntu.com/questions/285539/detect-and-mount-devices
+http://askubuntu.com/questions/285539/detect-and-mount-objects
 
 
 ----------------------------------ooOOOOoo---------------------------------------
@@ -1071,7 +1080,7 @@ cron.hourly scripts
 A script ending with .sh is not executed in /etc/cron.hourly folder:
 
 https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=308911
-Links or binaries inside a directory handled by run-pars (like /etc/cron.daily) will not run if a period is part of their name.
+Links or binaries inside a directory handled by run-parts (like /etc/cron.daily) will not run if a period is part of their name.
 rename the script
 
 mv /etc/cron.hourly/Hour-sound.sh /etc/cron.hourly/Hour-sound
@@ -1081,6 +1090,26 @@ or put the script-call into
 which allows the .sh ending
 
 http://askubuntu.com/questions/611336/why-putting-a-script-in-etc-cron-hourly-is-not-working
+
+Running the scripts manually on-demand
+
+
+16
+down vote
+favorite
+2
+I have been digging through my Linux system. To try and understand how it all works
+
+In the /etc/crontab file. I see the following
+
+# run-parts
+01 * * * * root run-parts /etc/cron.hourly
+02 4 * * * root run-parts /etc/cron.daily
+22 4 * * 0 root run-parts /etc/cron.weekly
+42 4 1 * * root run-parts /etc/cron.monthly
+
+
+http://superuser.com/questions/402781/what-is-run-parts-in-etc-crontab-and-how-do-i-use-it
 
 ----------------------------------ooOOOOoo---------------------------------------
 date conversions
@@ -1380,7 +1409,7 @@ user@lubuntu-vm:~$ export JAVA_HOME
 user@lubuntu-vm:~$ mvn --version
 Apache Maven 3.3.9
 Maven home: /usr/share/maven
-Java version: 1.8.0_91, vendor: Oracle Corporation
+Java version: 1.8.0_91, type: Oracle Corporation
 Java home: /usr/lib/jvm/java-8-openjdk-amd64/jre
 Default locale: en_US, platform encoding: UTF-8
 OS name: "linux", version: "4.4.0-36-generic", arch: "amd64", family: "unix"
@@ -1712,5 +1741,42 @@ macosX changing creation time and modified time
 touch –mt 201006301525 /Volumes/Mac\ HD/Pictures/myfile.jpg
 
 http://blog.grapii.com/2010/07/change-a-files-creationmodified-date-on-mac-os-x/
+----------------------------------ooOOOOoo---------------------------------------
+JQ JSON parser for bash
+
+administrator@compo-feature:/usr/local/compo/service/etc$ jq '.objects[] | select(.type == "compo")' compo.json
+{
+  "key": "Really you need a key ?",
+  "some_value": 360,
+  "url": "http://service-local",
+  "type": "compo",
+  "object_timer": 400,
+  "username": "Who am i ",
+  "periodic_timer": 8640,
+  "visibility_timer": 980,
+  "cmp_cfg_attrib": "Compo-Type-1"
+}
+administrator@compo-feature:/usr/local/compo/service/etc$ jq '.objects[] | select(.type == "compo") | .url' compo.json
+"http://service-local"
+administrator@compo-feature:/usr/local/compo/service/etc$ jq '.objects[] | select(.type == "compo") | .key' compo.json
+"Really you need a key ?"
+administrator@compo-feature:/usr/local/compo/service/etc$ jq '.objects[] | select(.type == "compo") | .username' compo.json
+"Who am i "
+administrator@compo-feature:/usr/local/compo/service/etc$ sudo cp compo.json compo.json.test
+administrator@compo-feature:/usr/local/compo/service/etc$ vi !$
+vi compo.json.test
+administrator@compo-feature:/usr/local/compo/service/etc$ sudo vi !$
+sudo vi compo.json.test
+administrator@compo-feature:/usr/local/compo/service/etc$ jq '.objects[] | select(.type == "compo") | .url' compo.json.test
+"http://service-local"
+administrator@compo-feature:/usr/local/compo/service/etc$ jq '.objects[] | select(.type == "compo") | .username' compo.json.test
+"Who am i "
+administrator@compo-feature:/usr/local/compo/service/etc$ jq '.objects[] | select(.type == "compo") | .key' compo.json.test
+"Really you need a key ?"
+
+https://stedolan.github.io/jq/
+https://stedolan.github.io/jq/manual/#Builtinoperatorsandfunctions
+
+----------------------------------ooOOOOoo---------------------------------------
 ----------------------------------ooOOOOoo---------------------------------------
 ----------------------------------ooOOOOoo---------------------------------------
