@@ -1774,6 +1774,13 @@ administrator@compo-feature:/usr/local/compo/service/etc$ jq '.objects[] | selec
 administrator@compo-feature:/usr/local/compo/service/etc$ jq '.objects[] | select(.type == "compo") | .key' compo.json.test
 "Really you need a key ?"
 
+administrator@compo-feature:/usr/local/compo/service/etc$ jq '.objects[] | select(.type == "compo") | .url' compo.json.test | head -1
+"http://service-local"
+
+# eliminate missing keys and also the null return values when the key is not present. 
+administrator@compo-feature:/usr/local/compo/service/etc$ jq '.objects[] | select(.type == "compo")  | select (. | has("key")) | .key' compo.json.test | head -1
+"http://service-local"
+
 https://stedolan.github.io/jq/
 https://stedolan.github.io/jq/manual/#Builtinoperatorsandfunctions
 
