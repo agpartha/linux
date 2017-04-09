@@ -1784,6 +1784,10 @@ administrator@compo-feature:/usr/local/compo/service/etc$ jq '.objects[] | selec
 https://stedolan.github.io/jq/
 https://stedolan.github.io/jq/manual/#Builtinoperatorsandfunctions
 
+http://blog.librato.com/posts/jq-json
+http://linuxcommando.blogspot.com/2008/03/using-sed-to-extract-lines-in-text-file.html
+
+
 ----------------------------------ooOOOOoo---------------------------------------
 ----------------------------------ooOOOOoo---------------------------------------
 ----------------------------------ooOOOOoo---------------------------------------
