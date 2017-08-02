@@ -231,10 +231,14 @@ git merge master upstream/master
 git remote set-url --push upstream no_push
 
 
+# Pushing selective commits to remote
+git push <remotename> <commit SHA>:<remotebranchname>
 
 http://blog.siyelo.com/how-to-bulk-delete-remote-git-tags/
 
 https://help.github.com/articles/changing-a-remote-s-url/
+
+https://stackoverflow.com/questions/3230074/how-can-i-push-a-specific-commit-to-a-remote-and-not-previous-commits
 
 ----------------------------------ooOOOOoo---------------------------------------
 virtualbox:
@@ -1558,7 +1562,7 @@ find options
 
 For example, -mtime 1 selects files that were modified between 1 and 2 days ago. -mtime +1 selects files that were modified at least 2 days ago. To get files modified at least 1 day ago, use -mtime +0.
 
-The description “was last modified n*24 hours ago” is only an approximation, and not a very clear one.
+The description “was last modified n*24 hours ago” is only an approximation, and not a veryclear one.
 
 If you find these rules hard to remember, use a reference file instead.
 
