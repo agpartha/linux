@@ -249,6 +249,15 @@ commit the changes
 0 files changed, 0 insertions(+), 0 deletions(-)
 mode change 100644 => 100755 script.sh
 
+# selective commit push
+up vote
+685
+down vote
+To push up through a given commit, you can write:
+
+git push <remotename> <commit SHA>:<remotebranchname>
+provided <remotebranchname> already exists on the remote. (If it doesn't, you can use git push <remotename> <commit SHA>:refs/heads/<remotebranchname> to autocreate it.)
+
 
 
 http://blog.siyelo.com/how-to-bulk-delete-remote-git-tags/
@@ -258,6 +267,8 @@ https://help.github.com/articles/changing-a-remote-s-url/
 https://stackoverflow.com/questions/3230074/how-can-i-push-a-specific-commit-to-a-remote-and-not-previous-commits
 
 https://stackoverflow.com/questions/10516201/updating-file-permissions-only-in-git
+
+https://stackoverflow.com/questions/3230074/how-can-i-push-a-specific-commit-to-a-remote-and-not-previous-commits
 
 ----------------------------------ooOOOOoo---------------------------------------
 virtualbox:
