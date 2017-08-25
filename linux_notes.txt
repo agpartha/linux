@@ -757,6 +757,10 @@ cat /etc/passwd | grep <username>
 
 Add NOPASSWD:ALL in visudo 
 
+sudo useradd -p $(openssl passwd -1 $PASS) $USERNAME
+
+https://stackoverflow.com/questions/2150882/how-to-automatically-add-user-account-and-password-with-a-bash-script
+
 http://www.howtogeek.com/howto/ubuntu/add-a-user-on-ubuntu-server/
 
 https://help.ubuntu.com/lts/serverguide/user-management.html
@@ -765,6 +769,52 @@ http://askubuntu.com/questions/325807/arrow-keys-tab-complete-not-working
 
 http://askubuntu.com/questions/7477/how-can-i-add-a-new-user-as-sudoer-using-the-command-line
 
+----------------------------------ooOOOOoo---------------------------------------
+ssh-keygen non-interactive way
+
+ssh-keygen -t rsa -N "" -f my.key
+
+or 
+
+echo -e "\n\n\n" | ssh-keygen -t rsa
+
+ssh-keygen -t rsa -b 4096 -C "comment" -P "examplePassphrase" -f "desired pathAndName" -q 
+
+ex:
+
+user@machine$ ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+Generating public/private rsa key pair.
+Created directory '/home/user/.ssh'.
+Your identification has been saved in /home/user/.ssh/id_rsa.
+Your public key has been saved in /home/user/.ssh/id_rsa.pub.
+The key fingerprint is:
+.....82:f6:c7:c2:42:c5:31:91:27:3a:02 user@machine
+The key's randomart image is:
++--[ RSA 2048]----+
+|    .**+         |
+....
+|   o o o         |
+|    . + o        |
+|     . o         |
+|                 |
++-----------------+
+user@machine:~$ 
+
+	
+1	 	
+It is correct anwser, but i still would like to know how to press enter more then one time - in another script. – Sławosz Sep 7 '10 at 14:45
+1	 	
+Sure thing - updated the answer to include how to send newlines to a script. – Rudu Sep 7 '10 at 14:47
+1	 	
+echo -e "\n\n\n" | sshkeygen -t rsa is not working for me, can you try it yourself? It pass only first enter. But on other, simple script it works. – Sławosz Sep 8 '10 at 10:00
+9	 	
+I'd recommend using yes "" instead of echo -e "\n\n\n" (yes outputs whatever argument is given [or "y" by default] in infinity – perfect for these situations where one just want to provide a "yes" answer to whatever a program might prompt for). yes is shorter, and should ssh-keygen ever add a question, that will automatically be answered in too. :) – zrajm Apr 24 '15 at 11:08 
+4	 	
+yes "y" | ssh-keygen ... is the correct answer. – Marius Jun 24 '16 at 22:57
+
+https://stackoverflow.com/questions/3659602/bash-script-for-generating-ssh-keys
+
+----------------------------------ooOOOOoo---------------------------------------
 ----------------------------------ooOOOOoo---------------------------------------
 Setting prompt to include user name and path 
 
