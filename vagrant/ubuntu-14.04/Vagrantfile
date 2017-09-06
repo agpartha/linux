@@ -1,0 +1,103 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+VM_IMAGE_URL  = 'https://oss-binaries.phusionpassenger.com/vagrant/boxes/latest/ubuntu-14.04-amd64-vbox.box'
+VM_IMAGE_NAME = 'phusion-ubuntu-14.04'
+
+USERNAME      = ENV['USER']
+PUBKEY        = File.read(File.expand_path '~/.ssh/id_rsa.pub')
+KNOWNHOSTS    = File.read(File.expand_path '~/.ssh/known_hosts')
+
+# The following lines will provision the build VM
+# assuming chef is set-up.
+#
+# knife solo prepare build.local
+# knife solo cook build.local nodes/build.local.json
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "build"
+
+  config.vm.provider :virtualbox do |driver, override|
+    driver.gui = false
+
+    driver.customize ['modifyvm', :id, '--cpus'        , 2    ]
+    driver.customize ['modifyvm', :id, '--memory'      , 1024 ]
+    driver.customize ['modifyvm', :id, '--natdnsproxy1', 'on' ]
+    # see https://github.com/mitchellh/vagrant/issues/7648
+    driver.customize ['modifyvm', :id, '--cableconnected1', 'on']
+  end
+
+  config.vm.define :build do |node|
+    node.vm.box      = VM_IMAGE_NAME
+    node.vm.box_url  = VM_IMAGE_URL
+    node.vm.hostname = 'build'
+    node.vm.network    :private_network, ip: "33.23.23.53"
+
+    node.vm.provider :virtualbox do |diver, override|
+      diver.name = 'build'
+    end
+
+    node.vm.provision "fix-no-tty", type: "shell" do |s|
+        s.privileged = false
+        s.inline = "sudo sed -i '/tty/!s/mesg n/tty -s \\&\\& mesg n/' /root/.profile"
+    end
+
+    node.vm.provision :shell, inline: <<-SCRIPT
+
+      sudo echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
+      sudo echo debconf shared/accepted-oracle-license-v1-1 seen true   | sudo debconf-set-selections
+	  # Update os and packages to latest
+      sudo DEBIAN_FRONTEND=noninteractive apt-add-repository -y ppa:webupd8team/java
+      sudo DEBIAN_FRONTEND=noninteractive apt-get -y update; sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade;sudo DEBIAN_FRONTEND=noninteractive apt clean;sudo DEBIAN_FRONTEND=noninteractive apt-get -y autoclean;sudo DEBIAN_FRONTEND=noninteractive apt-get -y remove; sudo DEBIAN_FRONTEND=noninteractive apt-get -y autoremove
+      sudo DEBIAN_FRONTEND=noninteractive apt-get install -y avahi-daemon libnss-mdns
+	  sudo DEBIAN_FRONTEND=noninteractive apt-get -y install build-essential
+	  sudo DEBIAN_FRONTEND=noninteractive apt-get -y install git
+	  sudo DEBIAN_FRONTEND=noninteractive apt-get -y install software-properties-common
+	  sudo DEBIAN_FRONTEND=noninteractive apt-get -y install oracle-java8-installer
+      sudo DEBIAN_FRONTEND=noninteractive apt-get -y install oracle-java8-set-default
+#	  sudo DEBIAN_FRONTEND=noninteractive apt-get purge java-1.8.0-openjdk-devel
+#	  sudo DEBIAN_FRONTEND=noninteractive apt-get purge openjdk-8-jdk
+	  sudo DEBIAN_FRONTEND=noninteractive apt-get -y install ant
+	  sudo DEBIAN_FRONTEND=noninteractive apt-get -y install maven2
+      cd /etc/avahi
+
+      if ! [ `egrep -q "^enable-dbus=no" avahi-daemon.conf` ]; then
+        sed -i "s/^#enable-dbus=yes/enable-dbus=no/g" avahi-daemon.conf
+      fi
+
+	  # Add the ubuntu user, allow group writes to all $USER to copy files into it.
+	  useradd ubuntu -m -p '' -c '' -G sudo -s /bin/bash -p $(openssl passwd -1 a1s200) && echo "Added user ubuntu.."
+      mkdir /home/ubuntu/.ssh && echo "Made '.ssh' for ubuntu..."
+      echo "#{ PUBKEY }" >> /home/ubuntu/.ssh/authorized_keys && echo "Added authorized key for ubuntu. Key was: '#{ PUBKEY }'"
+      echo "#{ KNOWNHOSTS }" >> /home/ubuntu/.ssh/known_hosts
+      echo ubuntu ALL=NOPASSWD:ALL > /etc/sudoers.d/ubuntu
+      chmod 0440 /etc/sudoers.d/ubuntu
+	  usermod -a -G vagrant ubuntu
+
+      # Add $USER
+      useradd #{ USERNAME } -m -p '' -c '' -G sudo -s /bin/bash && echo "Added user #{ USERNAME }..."
+      mkdir /home/#{ USERNAME }/.ssh && echo "Made '.ssh' for #{ USERNAME }..."
+      echo "#{ PUBKEY }" >> /home/#{ USERNAME }/.ssh/authorized_keys && echo "Added authorized key for #{ USERNAME }. Key was: '#{ PUBKEY }'"
+      echo "#{ KNOWNHOSTS }" >> /home/#{ USERNAME }/.ssh/known_hosts
+      echo #{USERNAME} ALL=NOPASSWD:ALL > /etc/sudoers.d/${USERNAME}
+      chmod 0440 /etc/sudoers.d/${USERNAME}
+	  usermod -a -G ubuntu #{ USERNAME }
+	  usermod -a -G vagrant #{ USERNAME }
+
+	  # add root to vagrant group
+	  usermod -a -G vagrant root
+	  usermod -a -G ubuntu root
+	  usermod -a -G #{USERNAME} root
+    SCRIPT
+
+    node.vm.synced_folder "../", "/opt/mount", {
+      :id        => 'build-mount',
+      :disabled  => false,
+	  :owner     => 'vagrant',
+      :group     => 'vagrant',
+      :mount_options => ["dmode=777","fmode=777"]
+    }
+  end
+end
