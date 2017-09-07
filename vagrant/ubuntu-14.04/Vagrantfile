@@ -46,15 +46,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     node.vm.provision :shell, inline: <<-SCRIPT
 
-      sudo echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
-      sudo echo debconf shared/accepted-oracle-license-v1-1 seen true   | sudo debconf-set-selections
 	  # Update os and packages to latest
+	  sudo DEBIAN_FRONTEND=noninteractive apt-get -y install software-properties-common
       sudo DEBIAN_FRONTEND=noninteractive apt-add-repository -y ppa:webupd8team/java
       sudo DEBIAN_FRONTEND=noninteractive apt-get -y update; sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade;sudo DEBIAN_FRONTEND=noninteractive apt clean;sudo DEBIAN_FRONTEND=noninteractive apt-get -y autoclean;sudo DEBIAN_FRONTEND=noninteractive apt-get -y remove; sudo DEBIAN_FRONTEND=noninteractive apt-get -y autoremove
       sudo DEBIAN_FRONTEND=noninteractive apt-get install -y avahi-daemon libnss-mdns
 	  sudo DEBIAN_FRONTEND=noninteractive apt-get -y install build-essential
 	  sudo DEBIAN_FRONTEND=noninteractive apt-get -y install git
-	  sudo DEBIAN_FRONTEND=noninteractive apt-get -y install software-properties-common
+      sudo echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
+      sudo echo debconf shared/accepted-oracle-license-v1-1 seen true   | sudo debconf-set-selections
 	  sudo DEBIAN_FRONTEND=noninteractive apt-get -y install oracle-java8-installer
       sudo DEBIAN_FRONTEND=noninteractive apt-get -y install oracle-java8-set-default
 #	  sudo DEBIAN_FRONTEND=noninteractive apt-get purge java-1.8.0-openjdk-devel
