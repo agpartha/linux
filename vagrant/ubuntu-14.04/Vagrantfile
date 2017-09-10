@@ -1,3 +1,4 @@
+ENV['VBOX_INSTALL_PATH'] = ENV['VBOX_MSI_INSTALL_PATH']
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
@@ -90,6 +91,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	  usermod -a -G vagrant root
 	  usermod -a -G ubuntu root
 	  usermod -a -G #{USERNAME} root
+      modprobe -a vboxguest vboxsf vboxvideo
     SCRIPT
 
     node.vm.synced_folder "../", "/opt/mount", {

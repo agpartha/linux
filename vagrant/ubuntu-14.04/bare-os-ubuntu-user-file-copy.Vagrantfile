@@ -1,3 +1,4 @@
+ENV['VBOX_INSTALL_PATH'] = ENV['VBOX_MSI_INSTALL_PATH']
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
@@ -71,6 +72,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       # Add $USER to the ubuntu group to allow easy file operations
 	  usermod -a -G ubuntu #{ USERNAME }
 
+      modprobe -a vboxguest vboxsf vboxvideo
     SCRIPT
 
     # Copy the base ISO for the connector
