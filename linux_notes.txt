@@ -229,6 +229,7 @@ git fetch upstream
 git checkout --track origin/master
 git merge master upstream/master
 git remote set-url --push upstream no_push
+git branch -u origin/dev
 
 
 # Pushing selective commits to remote
