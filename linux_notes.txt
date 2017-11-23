@@ -1,5 +1,5 @@
 
-----------------------------------ooOOOOoo---------------------------------------
+---------------------------------ooOOOOoo---------------------------------------
 
 libpcap:
 
@@ -258,6 +258,12 @@ To push up through a given commit, you can write:
 
 git push <remotename> <commit SHA>:<remotebranchname>
 provided <remotebranchname> already exists on the remote. (If it doesn't, you can use git push <remotename> <commit SHA>:refs/heads/<remotebranchname> to autocreate it.)
+
+# Undo the last commit and unstage the changes as well (Go back to state it was before commit)
+git reset HEAD^
+This will bring the dir to state before you've made the commit, HEAD^ means the parent of the current commit (the one you don't want anymore), while keeping changes from it (unstaged).
+
+https://stackoverflow.com/questions/37420642/how-to-undo-the-last-commit-in-git
 
 
 
@@ -1627,6 +1633,12 @@ ntp updates
 sudo ntpdate -s time.nist.gov
 
 sudo timedatectl set-timezone Etc/UTC
+
+sudo service ntp stop
+sudo ntpd -gq
+sudo service ntp start
+
+https://askubuntu.com/questions/254826/how-to-force-a-clock-update-using-ntp
 
 ----------------------------------ooOOOOoo---------------------------------------
 
