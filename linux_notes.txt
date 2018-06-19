@@ -1885,6 +1885,15 @@ http://blog.librato.com/posts/jq-json
 http://linuxcommando.blogspot.com/2008/03/using-sed-to-extract-lines-in-text-file.html
 
 
+
+----------------------------------ooOOOOoo---------------------------------------
+
+git config --local -l 
+git config --local user.name $USER
+git config --local user.email $USER_EMAIL
+git config --local credential.helper osxkeychain
+
+----------------------------------ooOOOOoo---------------------------------------
 ----------------------------------ooOOOOoo---------------------------------------
 ----------------------------------ooOOOOoo---------------------------------------
 ----------------------------------ooOOOOoo---------------------------------------
