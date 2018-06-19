@@ -1892,6 +1892,7 @@ git config --local -l
 git config --local user.name $USER
 git config --local user.email $USER_EMAIL
 git config --local credential.helper osxkeychain
+git config core.sshCommand "ssh -i ~/.ssh/$USER.pub -F /dev/null"
 
 ----------------------------------ooOOOOoo---------------------------------------
 ----------------------------------ooOOOOoo---------------------------------------
