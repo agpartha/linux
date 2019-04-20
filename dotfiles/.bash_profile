@@ -51,20 +51,22 @@ test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shel
 # Docker and Kubernetes
 #
 alias g=git
-alias gl="git log"
-alias gpl="git pull"
-alias gpu="git push"
+alias gl="git log " 
+alias ga="git add "
+alias gs="git status "
+alias gpl="git pull "
+alias gpu="git push "
 alias gcm="git commit -m "
 
 alias d=docker
-alias di="docker image ls"
-alias dc="docker ps"
+alias di="docker image ls "
+alias dc="docker ps "
 alias dcln="docker image ls | grep none | awk '{print $3}' | xargs docker rmi -f "
 
-alias k=kubectl
-alias kp="kubectl get pods"
-alias kd="kubectl get deployments"
-alias ks="kubectl get services"
+alias k=kubectl 
+alias kp="kubectl get pods "
+alias kd="kubectl get deployments " 
+alias ks="kubectl get services "
 alias kdc="kubectl create -f "
 alias ksc="kubectl create -f "
 alias kdd="kubectl delete deployment "
