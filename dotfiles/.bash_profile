@@ -45,3 +45,28 @@ alias delche='(pushd ~/Documents/code/vagrant/;export VAGRANT_DOTFILE_PATH=".che
 alias sshche='(pushd ~/Documents/code/vagrant/;export VAGRANT_DOTFILE_PATH=".chef.vagrant";   export VAGRANT_VAGRANTFILE="chef.Vagrantfile";vagrant ssh;popd)'
 
 test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
+
+#
+# Docker and Kubernetes
+#
+alias g=git
+alias gl="git log"
+alias gpl="git pull"
+alias gpu="git push"
+alias gcm="git commit -m "
+
+alias d=docker
+alias di="docker image ls"
+alias dc="docker ps"
+alias dcln="docker image ls | grep none | awk '{print $3}' | xargs docker rmi -f "
+
+alias k=kubectl
+alias kp="kubectl get pods"
+alias kd="kubectl get deployments"
+alias ks="kubectl get services"
+alias kcd="kubectl create deployment -f "
+alias kcs="kubectl create service -f "
+alias kcld="kubectl delete deployment "
+alias kcls="kubectl delete service "
+alias kclp="kubectl delete pod "
+
