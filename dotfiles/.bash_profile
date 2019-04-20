@@ -8,6 +8,8 @@ export CODE_ROOT="~/code"
 #
 alias upni="source ~/.bash_profile"
 alias edni="vi ~/.bash_profile"
+alias h="history "
+alias hn="history | cut -c 8- "
 alias pdb="psql -U dnuser -h dburl dbname"
 alias sdb="ssh -t dbhostname 'psql -U dbuser -h 127.0.0.1'"
 alias tdb="ssh -t dbhostaccess 'psql -U dbuser -h dbuser dbname'"
