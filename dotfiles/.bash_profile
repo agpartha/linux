@@ -72,7 +72,7 @@ alias ks="kubectl get services "
 alias kdc="kubectl create -f "
 alias ksc="kubectl create -f "
 alias kdd="kubectl delete deployment "
-alias kss="kubectl delete service "
+alias ksd="kubectl delete service "
 alias kpd="kubectl delete pod "
 alias kto="kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')"
 
